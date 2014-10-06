@@ -1,0 +1,3 @@
+from temboo.Library.Utilities.Text.GenerateGUID import GenerateGUID, GenerateGUIDInputSet, GenerateGUIDResultSet, GenerateGUIDChoreographyExecution
+from temboo.Library.Utilities.Text.Substitute import Substitute, SubstituteInputSet, SubstituteResultSet, SubstituteChoreographyExecution
+from temboo.Library.Utilities.Text.SubstituteRegex import SubstituteRegex, SubstituteRegexInputSet, SubstituteRegexResultSet, SubstituteRegexChoreographyExecution

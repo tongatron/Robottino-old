@@ -1,0 +1,2 @@
+from temboo.Library.LinkedIn.ShareAndSocialStream.CreateShare import CreateShare, CreateShareInputSet, CreateShareResultSet, CreateShareChoreographyExecution
+from temboo.Library.LinkedIn.ShareAndSocialStream.GetShare import GetShare, GetShareInputSet, GetShareResultSet, GetShareChoreographyExecution

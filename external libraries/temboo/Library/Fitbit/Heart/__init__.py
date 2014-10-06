@@ -1,0 +1,3 @@
+from temboo.Library.Fitbit.Heart.DeleteHeartRateLog import DeleteHeartRateLog, DeleteHeartRateLogInputSet, DeleteHeartRateLogResultSet, DeleteHeartRateLogChoreographyExecution
+from temboo.Library.Fitbit.Heart.GetHeartRate import GetHeartRate, GetHeartRateInputSet, GetHeartRateResultSet, GetHeartRateChoreographyExecution
+from temboo.Library.Fitbit.Heart.LogHeartRate import LogHeartRate, LogHeartRateInputSet, LogHeartRateResultSet, LogHeartRateChoreographyExecution
