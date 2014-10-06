@@ -1,0 +1,38 @@
+body {
+  height: 100%;
+  margin: 0;  
+  font-family: courier;
+}
+
+#logo {
+  margin-top: 50px;
+  width: 30%;
+  min-width: 200px;
+}
+
+#magical-ride {      
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: block;      
+  text-align: center;
+  cursor: pointer;
+}
+
+#magical-text {
+  margin-top: 15px;
+  font-size: 1em;
+  color: #DDD;
+}
+
+#recap {
+  color: rgb(0,176,179);
+  font-size: 2em;
+}
+
+#info {
+  font-size: 20px;
+  text-align: center;
+  color: #777;
+  visibility: hidden;
+}
