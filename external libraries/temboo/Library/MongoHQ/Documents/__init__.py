@@ -1,6 +1,0 @@
-from temboo.Library.MongoHQ.Documents.BulkUpdate import BulkUpdate, BulkUpdateInputSet, BulkUpdateResultSet, BulkUpdateChoreographyExecution
-from temboo.Library.MongoHQ.Documents.CreateDocument import CreateDocument, CreateDocumentInputSet, CreateDocumentResultSet, CreateDocumentChoreographyExecution
-from temboo.Library.MongoHQ.Documents.DeleteDocument import DeleteDocument, DeleteDocumentInputSet, DeleteDocumentResultSet, DeleteDocumentChoreographyExecution
-from temboo.Library.MongoHQ.Documents.GetDocument import GetDocument, GetDocumentInputSet, GetDocumentResultSet, GetDocumentChoreographyExecution
-from temboo.Library.MongoHQ.Documents.ListDocuments import ListDocuments, ListDocumentsInputSet, ListDocumentsResultSet, ListDocumentsChoreographyExecution
-from temboo.Library.MongoHQ.Documents.UpdateDocument import UpdateDocument, UpdateDocumentInputSet, UpdateDocumentResultSet, UpdateDocumentChoreographyExecution

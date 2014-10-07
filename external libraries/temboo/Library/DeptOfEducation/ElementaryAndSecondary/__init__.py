@@ -1,1 +1,0 @@
-from temboo.Library.DeptOfEducation.ElementaryAndSecondary.LookupSchool import LookupSchool, LookupSchoolInputSet, LookupSchoolResultSet, LookupSchoolChoreographyExecution

@@ -1,3 +1,0 @@
-from temboo.Library.MongoHQ.Deployments.GetDeployment import GetDeployment, GetDeploymentInputSet, GetDeploymentResultSet, GetDeploymentChoreographyExecution
-from temboo.Library.MongoHQ.Deployments.GetLogs import GetLogs, GetLogsInputSet, GetLogsResultSet, GetLogsChoreographyExecution
-from temboo.Library.MongoHQ.Deployments.ListDeployments import ListDeployments, ListDeploymentsInputSet, ListDeploymentsResultSet, ListDeploymentsChoreographyExecution
