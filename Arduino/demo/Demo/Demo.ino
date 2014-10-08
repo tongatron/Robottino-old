@@ -1,3 +1,21 @@
+/*
+  A5   fotoresistenza
+  
+  0
+  1
+  2    SDA - Display
+  3  ~ SCL - Display
+  4
+  5  ~ ultrasonic echo
+  6  ~ ultrasonic trigger
+  7    
+  8    servo
+  9  ~ RGB Blue
+  10 ~ RGB Green
+  11 ~ buzzer
+  12
+  13 ~ RGB Red
+*/
 
 //display
 #include <Wire.h>
