@@ -1,3 +1,4 @@
+
 //display
 #include <Wire.h>
 #include <SeeedOLED.h>
@@ -12,11 +13,8 @@ const int led_red = 13;
 #include <Servo.h>  
 Servo servo;
 int pos = 0;
-
-//light theremin
-int sensorValue;
-int sensorLow = 1023;
-int sensorHigh = 0;
+const int slow = 8;
+const int fast = 2;
 
 
 /*
@@ -101,14 +99,14 @@ void setup() {
   pinMode(led_blue, OUTPUT);
   pinMode(led_green, OUTPUT);
   pinMode(led_red, OUTPUT);
+   
 
   ledblue();  
  
   //Servo
   servo.attach(8);
-  rotate();
-  voice();
 
+  rotate();
 }
 
 void loop() { 
@@ -120,31 +118,75 @@ void loop() {
 
 // **************************** ****************************  ****************************
 
-void voice(){
-  
-   for (int i=0; i <= 255; i++){
-    sensorValue = ((analogRead(A5)+analogRead(A5))/2);
-    int pitch = map(sensorValue, sensorLow, sensorHigh, 50, 4000);
-    tone(11, pitch, 20);
-    delay(10);
-     }   
-}
-
-// **************************** ****************************  ****************************
-
 void rotate(){
-  for(pos = 90; pos <= 180; pos += 1)  {                            
+  
+  for(pos = 90; pos <= 130; pos += 1)  {
+  ledred();    
   servo.write(pos);           
-  delay(30);                    
+  delay(slow);                    
   } 
-  for(pos = 180; pos>=0; pos-=1){                                
+ 
+  for(pos = 130; pos>=40; pos-=1){
+  ledblue();    
   servo.write(pos);         
-  delay(30);            
+  delay(fast);            
   }
-  for(pos = 0; pos <= 90; pos += 1)  {                            
+ 
+  for(pos = 40; pos <= 80; pos += 1)  {
+  ledred();
   servo.write(pos);           
-  delay(30);                    
+  delay(slow);                    
   }
+  
+  for(pos = 80; pos <= 180; pos += 1)  {
+  ledblue();    
+  servo.write(pos);           
+  delay(fast);                    
+  }
+ 
+  for(pos = 180; pos>=0; pos-=1){
+  ledred();
+  servo.write(pos);         
+  delay(slow);            
+  }
+    
+    
+  for(pos = 0; pos <= 110; pos += 1)  {
+  ledblue();    
+  servo.write(pos);           
+  delay(fast);                    
+  } 
+ 
+  for(pos = 110; pos>=0; pos-=1){  
+  ledblue();    
+  servo.write(pos);         
+  delay(fast);            
+  }
+ 
+  for(pos = 0; pos <= 40; pos += 1)  {
+  ledred();
+  servo.write(pos);           
+  delay(slow);                    
+  }
+  
+  for(pos = 40; pos <= 150; pos += 1)  {  
+  ledred();
+  servo.write(pos);           
+  delay(slow);                    
+  }
+ 
+  for(pos = 150; pos>=110; pos-=1){  
+  ledblue();    
+  servo.write(pos);         
+  delay(fast);            
+  }
+  
+  for(pos = 110; pos>=90; pos-=1){ 
+  ledblue();    
+  servo.write(pos);         
+  delay(fast);            
+  }  
+  
   servo.write(90);
   delay(100);
 }
