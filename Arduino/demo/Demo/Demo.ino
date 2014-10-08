@@ -1,22 +1,3 @@
-/*
-  A5   fotoresistenza
-  
-  0
-  1
-  2    SDA - Display
-  3  ~ SCL - Display
-  4
-  5  ~ ultrasonic echo
-  6  ~ ultrasonic trigger
-  7    
-  8    servo
-  9  ~ RGB Blue
-  10 ~ RGB Green
-  11 ~ buzzer
-  12
-  13 ~ RGB Red
-*/
-
 //display
 #include <Wire.h>
 #include <SeeedOLED.h>
@@ -38,6 +19,7 @@ int sensorLow = 1023;
 int sensorHigh = 0;
 
 
+/*
 static unsigned char Horns[] PROGMEM ={
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -104,7 +86,7 @@ static unsigned char Horns[] PROGMEM ={
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
-
+*/
 
 void setup() {
   
@@ -112,7 +94,7 @@ void setup() {
   Wire.begin();
   SeeedOled.init(); 
   SeeedOled.clearDisplay();
-  SeeedOled.drawBitmap(Horns,1024);  
+  //SeeedOled.drawBitmap(Horns,1024);  
   
   //output
   pinMode(buzzer,OUTPUT);
@@ -130,16 +112,42 @@ void setup() {
 }
 
 void loop() { 
-  ledred();
-  delay(2000);
-  ledred();
-  delay(2000);  
-  ledblue();
-  delay(2000);
-  rotate();
-  voice(); 
+
 }
 
+
+
+
+// **************************** ****************************  ****************************
+
+void voice(){
+  
+   for (int i=0; i <= 255; i++){
+    sensorValue = ((analogRead(A5)+analogRead(A5))/2);
+    int pitch = map(sensorValue, sensorLow, sensorHigh, 50, 4000);
+    tone(11, pitch, 20);
+    delay(10);
+     }   
+}
+
+// **************************** ****************************  ****************************
+
+void rotate(){
+  for(pos = 90; pos <= 180; pos += 1)  {                            
+  servo.write(pos);           
+  delay(30);                    
+  } 
+  for(pos = 180; pos>=0; pos-=1){                                
+  servo.write(pos);         
+  delay(30);            
+  }
+  for(pos = 0; pos <= 90; pos += 1)  {                            
+  servo.write(pos);           
+  delay(30);                    
+  }
+  servo.write(90);
+  delay(100);
+}
 
 // **************************** ****************************  ****************************
 
@@ -165,49 +173,4 @@ void ledoff(){
     digitalWrite(led_blue, LOW);
   digitalWrite(led_green, LOW);
   digitalWrite(led_red, LOW);  
-}
-
-// **************************** ****************************  ****************************
-
-void voice(){
-  SeeedOled.clearDisplay();
-   for (int i=0; i <= 10; i++){
-      sensorValue = analogRead(A5);
-      int pitch = map(sensorValue, sensorLow, sensorHigh, 4000, 5000);
-      tone(buzzer, pitch, 20);         
-      SeeedOled.setTextXY(3,0);
-      SeeedOled.putString("   **  **  ** ");
-      SeeedOled.setTextXY(4,0);
-      SeeedOled.putString(" **  **  **  * ");  
-      delay(1);
-      SeeedOled.setTextXY(3,0);
-      SeeedOled.putString(" **  **  **  **");
-      SeeedOled.setTextXY(4,0);
-      SeeedOled.putString("   **  **  ** ");
-      sensorValue = analogRead(A5);
-      pitch = map(sensorValue, sensorLow, sensorHigh, 4000, 5000);
-      tone(buzzer, pitch, 20);
-      delay(1);   
-    }   
-  SeeedOled.clearDisplay();
-  SeeedOled.drawBitmap(Horns,1024);      
-}
-
-// **************************** ****************************  ****************************
-
-void rotate(){
-  for(pos = 90; pos <= 180; pos += 1)  {                            
-  servo.write(pos);           
-  delay(30);                    
-  } 
-  for(pos = 180; pos>=0; pos-=1){                                
-  servo.write(pos);         
-  delay(30);            
-  }
-  for(pos = 0; pos <= 90; pos += 1)  {                            
-  servo.write(pos);           
-  delay(30);                    
-  }
-  servo.write(90);
-  delay(100);
 }
