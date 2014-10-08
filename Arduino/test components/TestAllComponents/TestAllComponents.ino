@@ -19,6 +19,11 @@
 */
 
 
+//Servo
+#include <Servo.h> 
+Servo myservo; 
+int pos = 0; 
+
 // photoresistors
 int lightValue1;
 int lightValue2;
@@ -39,6 +44,8 @@ NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and
 void setup(){
   
   Serial.begin(9600);
+  //piezo
+  pinMode(11, OUTPUT);
   
   //display
   Wire.begin();	
@@ -73,7 +80,25 @@ void setup(){
   digitalWrite(9,LOW);
   digitalWrite(10,LOW);
   digitalWrite(13,HIGH);  
-  delay(500);  
+  delay(500); 
+  
+  analogWrite(11, 10);   
+  delay(100);              
+  digitalWrite(11, LOW);    
+  delay(5000); 
+  
+  myservo.attach(8); 
+    for(pos = 0; pos <= 180; pos += 1) // goes from 0 degrees to 180 degrees 
+  {                                  // in steps of 1 degree 
+    myservo.write(pos);              // tell servo to go to position in variable 'pos' 
+    delay(15);                       // waits 15ms for the servo to reach the position 
+  } 
+  for(pos = 180; pos>=90; pos-=1)     // goes from 180 degrees to 0 degrees 
+  {                                
+    myservo.write(pos);              // tell servo to go to position in variable 'pos' 
+    delay(15);                       // waits 15ms for the servo to reach the position 
+  }
+  
   
   }
 
