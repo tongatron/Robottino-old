@@ -1,27 +1,16 @@
 /* https://www.temboo.com/arduino/yun/read-a-tweet
 
-If you are encountering errors intermittently, this can be a sign of an out-of-memory condition on your board. If you're running out of RAM on your Yún (a common issue on resource constrained devices), this can cause the Choreo data to get overwritten and corrupted on the 32U4 side, which is why it appears that there is a problem with your Temboo code even though you haven't changed it.
-You can free up some RAM by putting the inputs that don't change (your Temboo credentials, your Twitter credentials, your output filter specifications, the Choreo to run) into a settings file on a micro SD card, as described here:
-https://temboo.com/arduino/using-settings-files
-
-You can also reduce memory usage by using a Profile to store your credentials on Temboo. This means that you can simply reference them from your sketch without including all of the String data that consumes memory. You can learn more about that approach here: 
-http://support.temboo.com/entries/21649533-using-credentials
 */
 
 #include <Bridge.h>
 #include <Temboo.h>
-#include "TembooAccount.h" // contains Temboo account information
-
-/*** SUBSTITUTE YOUR VALUES BELOW: ***/
-// Note that for additional security and reusability, you could
-// use #define statements to specify these values in a .h file.
-const String TWITTER_ACCESS_TOKEN = "2745340788-KmX9qA2AMLR5YLVq8BqIfCiZnt2RXR1qt4St7gh";
-const String TWITTER_ACCESS_TOKEN_SECRET = "m9lnkaWRNv5ksdlDR9N8KMZAvGDdxygU442AJn3FTdm4a";
-const String TWITTER_API_KEY = "wvgBITg372lBUB7TMsZOhViA1";
-const String TWITTER_API_SECRET = "urTw28x2XiqedJ6hw931b4rk30LdjPDMUOyRw2PG5CwBqAQqQA";
 
 int numRuns = 1;   // execution count, so this doesn't run forever
 int maxRuns = 30;   // the max number of times the Twitter HomeTimeline Choreo should run
+
+// to compare the tweets, 112 are the maximuc characters on the Oled
+char tweetchar[112];
+char tweetchar_old[112];
 
 //servo
 #include <Servo.h>  
@@ -36,8 +25,6 @@ const int led_blue = 9;
 const int led_green = 10;
 const int led_red = 13;
 
-char tweetchar[112];
-char tweetchar_old[112];
 
 //display
 #include <Wire.h>
@@ -110,7 +97,6 @@ static unsigned char smile_display[] PROGMEM ={
 };
 
 
-
 void setup() {
   
   //output
@@ -130,8 +116,9 @@ void setup() {
   //Serial.begin(9600);
   servo.attach(8);
   
-  delay(4000);
+  delay(1000);
   //while(!Serial);  // For debugging, wait until a serial console is connected.
+  
   Bridge.begin();
   
   ledgreen();
@@ -142,49 +129,22 @@ void loop()
 {
   
   SeeedOled.clearDisplay();
-  SeeedOled.drawBitmap(smile_display,1024); 
+  SeeedOled.drawBitmap(smile_display,1024);
+   
   
  // while we haven't reached the max number of runs...
   if (numRuns <= maxRuns) {
     //Serial.println("Running ReadATweet - Run #" + String(numRuns++));
-    
     TembooChoreo HomeTimelineChoreo;
-
+    
+    
     // invoke the Temboo client.
     // NOTE that the client must be reinvoked, and repopulated with
     // appropriate arguments, each time its run() method is called.
     HomeTimelineChoreo.begin();
     
-    // set Temboo account credentials
-    HomeTimelineChoreo.setAccountName(TEMBOO_ACCOUNT);
-    HomeTimelineChoreo.setAppKeyName(TEMBOO_APP_KEY_NAME);
-    HomeTimelineChoreo.setAppKey(TEMBOO_APP_KEY);
-
-    // tell the Temboo client which Choreo to run (Twitter > Timelines > HomeTimeline)
-    HomeTimelineChoreo.setChoreo("/Library/Twitter/Timelines/HomeTimeline");
-    
-    
-    // set the required choreo inputs
-    // see https://www.temboo.com/library/Library/Twitter/Timelines/HomeTimeline/
-    // for complete details about the inputs for this Choreo
-
-    HomeTimelineChoreo.addInput("Count", "1"); // the max number of Tweets to return from each request
-    HomeTimelineChoreo.addInput("AccessToken", TWITTER_ACCESS_TOKEN);
-    HomeTimelineChoreo.addInput("AccessTokenSecret", TWITTER_ACCESS_TOKEN_SECRET);
-    HomeTimelineChoreo.addInput("ConsumerKey", TWITTER_API_KEY);    
-    HomeTimelineChoreo.addInput("ConsumerSecret", TWITTER_API_SECRET);
-
-    // next, we'll define two output filters that let us specify the 
-    // elements of the response from Twitter that we want to receive.
-    // see the examples at http://www.temboo.com/arduino
-    // for more on using output filters
-   
-    // we want the text of the tweet
-    HomeTimelineChoreo.addOutputFilter("tweet", "/[1]/text", "Response");
-    
-    // and the name of the author
-    HomeTimelineChoreo.addOutputFilter("author", "/[1]/user/screen_name", "Response");
-
+    // store the settings file in sda
+    HomeTimelineChoreo.setSettingsFileToRead("/mnt/sda1/MyTwitterSettings");    
 
     // tell the Process to run and wait for the results. The 
     // return code will tell us whether the Temboo client 
@@ -231,21 +191,17 @@ void loop()
       //Serial.println("@" + author + " - " + tweet);
       delay(200);
 
-      tweet.toCharArray(tweetchar, sizeof(tweetchar));
-           
-      
+      tweet.toCharArray(tweetchar, sizeof(tweetchar));  
               if (strcmp(tweetchar,tweetchar_old) == 0) {
-
                 ledgreen();
                 delay(100);
-                
       	      }
-      
               else {
               rotate();
-	      SeeedOled.clearDisplay();          
+	      SeeedOled.clearDisplay();
+              SeeedOled.setHorizontalMode();
 	      SeeedOled.putString(tweetchar);
-	      delay(3000);	             
+	      delay(5000);	             
               //Serial.println(tweetchar);
               //Serial.println(tweetchar_old);         
               tweet.toCharArray(tweetchar_old, sizeof(tweetchar_old));

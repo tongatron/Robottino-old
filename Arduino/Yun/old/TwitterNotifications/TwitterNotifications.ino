@@ -185,7 +185,8 @@ void loop()
       
               else {
               rotate();
-	      SeeedOled.clearDisplay();          
+	      SeeedOled.clearDisplay();
+              SeeedOled.setHorizontalMode();
 	      SeeedOled.putString(tweetchar);
 	      delay(3000);	             
               //Serial.println(tweetchar);
