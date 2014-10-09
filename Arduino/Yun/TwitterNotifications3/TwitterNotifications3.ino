@@ -121,7 +121,7 @@ void setup() {
   
   Bridge.begin();
   
-  ledgreen();
+  ledblue();
   
 }
 
@@ -169,9 +169,7 @@ void loop()
       // we can read this format into separate variables, as follows:
       
       while(HomeTimelineChoreo.available()) {
-        
-        ledblue();
-        
+                
         // read the name of the output item
         String name = HomeTimelineChoreo.readStringUntil('\x1F');
         name.trim();
@@ -194,13 +192,14 @@ void loop()
       tweet.toCharArray(tweetchar, sizeof(tweetchar));  
               if (strcmp(tweetchar,tweetchar_old) == 0) {
                 ledgreen();
-                delay(100);
+                delay(1000);
       	      }
               else {
               rotate();
 	      SeeedOled.clearDisplay();
               SeeedOled.setHorizontalMode();
 	      SeeedOled.putString(tweetchar);
+              
 	      delay(5000);	             
               //Serial.println(tweetchar);
               //Serial.println(tweetchar_old);         
@@ -231,13 +230,8 @@ void loop()
   //Serial.println("Waiting...");
   ledgreen();
   SeeedOled.clearDisplay();
-  SeeedOled.setTextXY(3,0);
-  SeeedOled.putString("***************");  
-  SeeedOled.setTextXY(4,0);
-  SeeedOled.putString("***************");
-  SeeedOled.setTextXY(6,0);
-  SeeedOled.putString("waiting...45secs");   
-  delay(45000); // wait 90 seconds between HomeTimeline calls  
+  SeeedOled.drawBitmap(smile_display,1024); 
+  delay(45000); // wait 45 seconds between HomeTimeline calls  
 }
 
 
@@ -246,19 +240,16 @@ void loop()
 void rotate(){
   
   for(pos = 90; pos <= 130; pos += 1)  {
-  ledred();    
   servo.write(pos);           
   delay(slow);                    
   } 
  
   for(pos = 130; pos>=40; pos-=1){
-  ledblue();    
   servo.write(pos);         
   delay(fast);            
   }
  
   for(pos = 40; pos <= 90; pos += 1)  {
-  ledred();
   servo.write(pos);           
   delay(slow);                    
   }
