@@ -5,7 +5,9 @@
 */
 
 // variable to hold sensor value
-int sensorValue;
+int Antenna1;
+int Antennas;
+
 // variable to calibrate low value
 int sensorLow = 1023;
 // variable to calibrate high value
@@ -21,13 +23,13 @@ void setup() {
   // calibrate for the first five seconds after program runs
   while (millis() < 5000) {
     // record the maximum sensor value
-    sensorValue = analogRead(A5);
-    if (sensorValue > sensorHigh) {
-      sensorHigh = sensorValue;
+    Antenna1 = analogRead(A5);
+    if (Antenna1 > sensorHigh) {
+      sensorHigh = Antenna1;
     }
     // record the minimum sensor value
-    if (sensorValue < sensorLow) {
-      sensorLow = sensorValue;
+    if (Antenna1 < sensorLow) {
+      sensorLow = Antenna1;
     }
   }
   // turn the LED off, signaling the end of the calibration period
@@ -36,10 +38,10 @@ void setup() {
 
 void loop() {
   //read the input from A0 and store it in a variable
-  sensorValue = ((analogRead(A5)+analogRead(A5))/2);
+  Antennas = ((analogRead(A5)+analogRead(A5))/2);
 
   // map the sensor values to a wide range of pitches
-  int pitch = map(sensorValue, sensorLow, sensorHigh, 50, 4000);
+  int pitch = map(Antennas, sensorLow, sensorHigh, 50, 4000);
 
   // play the tone for 20 ms on pin 8
   tone(11, pitch, 20);
