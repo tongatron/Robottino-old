@@ -1,8 +1,8 @@
 /*
-it moves to 0-180 and back
-misure distance
-if distance is less then xx
-it stops, souns Star Wars and writes a message on screen
+it moves like a radar (0-180 with servo)
+if distance from ulstrasonic is less then xx cm,
+it stops and shows a differente message on display
+...and plays Star Wars
 
 Giovanni Bindi
 oct. 2014

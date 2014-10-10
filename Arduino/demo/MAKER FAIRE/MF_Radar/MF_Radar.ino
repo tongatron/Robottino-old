@@ -1,35 +1,17 @@
 /*
-Maker Faire 2014
 
+it moves like a radar (0-180 with servo)
+if distance from ulstrasonic is less then xx cm, it stops
+and shows a differente message on display
+
+Giovanni Bindi
+oct. 2014
 */
 
-// star wars 
-const int c = 261;
-const int d = 294;
-const int e = 329;
-const int f = 349;
-const int g = 391;
-const int gS = 415;
-const int a = 440;
-const int aS = 455;
-const int b = 466;
-const int cH = 523;
-const int cSH = 554;
-const int dH = 587;
-const int dSH = 622;
-const int eH = 659;
-const int fH = 698;
-const int fSH = 740;
-const int gH = 784;
-const int gSH = 830;
-const int aH = 880;
-const int buzzerPin = 11;
-const int ledPin1 = 9;
-const int ledPin2 = 13;
-int counter = 0;
-
-int sensorvalue;
-
+//light theremin
+int sensorValue;
+int sensorLow = 1023;
+int sensorHigh = 0;
 
 //display
 #include <Wire.h>
@@ -204,8 +186,6 @@ static unsigned char daje[] PROGMEM ={
 
 void setup() {
   
-
-
   for (int thisReading = 0; thisReading < numReadings; thisReading++) // 0, 1, 2
    readings[thisReading] = 0;  
   
@@ -255,7 +235,7 @@ void loop() {
 
 int getDistanceAndSend2Serial(int angle) {
   int cm = sonar.ping_cm();
-  delay(15);
+  delay(20);
 
 
   readings[index] = cm;
@@ -264,16 +244,28 @@ int getDistanceAndSend2Serial(int angle) {
   if (index>=numReadings)
 	index = 0;
 
-    sensorvalue = analogRead(A5);
-    Serial.println(sensorvalue);
+  Serial.print("cm: ");
+  Serial.print(cm);
+  Serial.print("cm ignora falsi: ");
+  Serial.println(cm_ignora_posit);  
+
+  if (cm_ignora_posit != 0) {
     
-    if (sensorvalue<800){
-            ledred();
+      //MKF
+      if (cm < 6) {
+        voice();        
+        ledred();
         SeeedOled.drawBitmap(daje,1024);
-        delay(1000);
+        delay(4000);
         SeeedOled.drawBitmap(mouth_zigzag,1024);
-      
-    }
+      }
+         
+      ledblue();
+      int pitch = map(cm, 0, 99, 50, 0);  // 50 per avere n tono piezo non fastidioso
+      analogWrite (led_green, pitch * 5); // da 0 a 250
+      analogWrite (buzzer, pitch);
+      delay(10); 
+    }  
 }
 
 // **************************** ****************************  ****************************
@@ -302,85 +294,17 @@ void ledoff(){
   digitalWrite(led_red, LOW);  
 }
 
-
 // **************************** ****************************  ****************************
 
-
-void beep(int note, int duration)
-{
-  //Play tone on buzzerPin
-  tone(buzzerPin, note, duration);
- 
-  //Play different LED depending on value of 'counter'
-  if(counter % 2 == 0)
-  {
-    digitalWrite(ledPin1, HIGH);
-    delay(duration);
-    digitalWrite(ledPin1, LOW);
-  }else
-  {
-    digitalWrite(ledPin2, HIGH);
-    delay(duration);
-    digitalWrite(ledPin2, LOW);
-  }
- 
-  //Stop tone on buzzerPin
-  noTone(buzzerPin);
- 
-  delay(50);
- 
-  //Increment counter
-  counter++;
-}
- 
-void firstSection()
-{
-  beep(a, 500);
-  beep(a, 500);    
-  beep(a, 500);
-  beep(f, 350);
-  beep(cH, 150);  
-  beep(a, 500);
-  beep(f, 350);
-  beep(cH, 150);
-  beep(a, 650);
- 
-  delay(500);
- 
-  beep(eH, 500);
-  beep(eH, 500);
-  beep(eH, 500);  
-  beep(fH, 350);
-  beep(cH, 150);
-  beep(gS, 500);
-  beep(f, 350);
-  beep(cH, 150);
-  beep(a, 650);
- 
-  delay(500);
-}
- 
-void secondSection()
-{
-  beep(aH, 500);
-  beep(a, 300);
-  beep(a, 150);
-  beep(aH, 500);
-  beep(gSH, 325);
-  beep(gH, 175);
-  beep(fSH, 125);
-  beep(fH, 125);    
-  beep(fSH, 250);
- 
-  delay(325);
- 
-  beep(aS, 250);
-  beep(dSH, 500);
-  beep(dH, 325);  
-  beep(cSH, 175);  
-  beep(cH, 125);  
-  beep(b, 125);  
-  beep(cH, 250);  
- 
-  delay(350);
+void voice(){
+   for (int i=0; i <= 40; i++){
+      sensorValue = analogRead(A5);
+      int pitch = map(sensorValue, sensorLow, sensorHigh, 4000, 5000);
+      tone(buzzer, pitch, 20);
+      delay(10);      
+      sensorValue = analogRead(A5);
+      pitch = map(sensorValue, sensorLow, sensorHigh, 4000, 5000);
+      tone(buzzer, pitch, 20);
+      delay(10);   
+    }      
 }

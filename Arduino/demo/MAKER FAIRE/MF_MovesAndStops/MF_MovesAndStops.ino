@@ -1,6 +1,11 @@
 /*
+
+it moves back and forth
+then it stops and show a message on display
+
 Giovanni Bindi
 28 settembre 2014
+
 ROBOTTINI @MakerFaire
 max delay motore: 2-3
 
