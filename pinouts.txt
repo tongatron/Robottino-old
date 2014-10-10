@@ -1,20 +1,47 @@
-PINOUTS
+ACTUAL PINOUTS
 
-A4 photoresistor
-A5 photoresistor
+A4  photoresistor
+A5  photoresistor
 
 0
 1
-2 SDA - Display
+2   SDA - Display
 3 ~ SCL - Display
-4 ultrasonic echo
-5 ~
-6 ~ one buzzer more (for trying more sound possibility)
-7 ultrasonic trigger
-8 servo
-9 ~ RGB Blue
+4   ultrasonic echo
+5 ~  
+6 ~  
+7   ultrasonic trigger
+8   servo
+9  ~ RGB Blue
 10 ~ RGB Green
 11 ~ Buzzer
 12
 13 ~ RGB Red
+
+
+NEXT VERSION PINOUTS
+
+Display will be moved after pin13, it use I2C communication and those pins
+will make it compatible with Uno and Leonardo.
+
+A4  photoresistor
+A5  photoresistor
+
+0
+1
+2   
+3 ~ 
+4   ultrasonic echo
+5 ~  
+6 ~  
+7   ultrasonic trigger
+8   servo
+9  ~ RGB Blue
+10 ~ RGB Green
+11 ~ Buzzer
+12
+13 ~ RGB Red
+
+SDA   SDA - Display
+SCL   SCL - Display
 
