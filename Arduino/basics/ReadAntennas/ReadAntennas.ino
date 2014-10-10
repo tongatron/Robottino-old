@@ -1,3 +1,10 @@
+/*
+read light values fromt antennas
+
+Giovanni Bindi
+oct. 2014
+*/
+
 void setup() {  
   Serial.begin(9600);
 }

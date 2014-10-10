@@ -1,20 +1,6 @@
 /*
-https://gist.github.com/biokys/6846527
-https://learn.sparkfun.com/tutorials/connecting-arduino-to-processing/to-processing
-
-Array to store data
-http://arduino.cc/en/Reference/Array
-
-http://arduino.cc/en/Tutorial/Smoothing
-
-attenzione: possibile che sia necessario cambiare valore a: String portName = Serial.list()[3];
-mello sketch di Processing
-
-FARE
-con certi oggetti-distanza rallenta la velocità di cicalio
-
-NOTE
-
+Giovanni Bindi
+oct. 2014
 */
 
 //light theremin

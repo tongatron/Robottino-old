@@ -1,3 +1,10 @@
+/*
+the display shows charatcters * * * continuosly
+it seems that the Robottino's mouth is speaking
+
+Giovanni Bindi
+oct 2014
+*/
 
 //display
 #include <Wire.h>

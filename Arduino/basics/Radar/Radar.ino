@@ -2,18 +2,8 @@
 https://gist.github.com/biokys/6846527
 https://learn.sparkfun.com/tutorials/connecting-arduino-to-processing/to-processing
 
-Array to store data
-http://arduino.cc/en/Reference/Array
-
-http://arduino.cc/en/Tutorial/Smoothing
-
-attenzione: possibile che sia necessario cambiare valore a: String portName = Serial.list()[3];
-mello sketch di Processing
-
-FARE
-con certi oggetti-distanza rallenta la velocità di cicalio
-
-NOTE
+Giovanni Bindi
+oct. 2014
 
 */
 
@@ -71,13 +61,11 @@ void setup() {
   Wire.begin();
   SeeedOled.init(); 
   SeeedOled.clearDisplay();
-  //SeeedOled.drawBitmap(Horns,1024);
   delay(200);
 
   
   Serial.begin(9600); 
   
-  // se attacco il servo, non funziona più la luce verde!!!!!!!!!!!!!!!
   myservo.attach(SERVO_PWM_PIN);  
   delay(200);
   digitalWrite (led_red, LOW);
@@ -123,8 +111,7 @@ int getDistanceAndSend2Serial(int angle) {
   //Serial.print("cm_ignora_posit: ");
   //Serial.println(cm_ignora_posit);  
   
-  // così facendo, quando trova un oggetto dimezza la velocità prinicipale (50)
-  // quindi il motorino dovrebbe dimezzare la velocità  
+  // while the object is detected, the motor will spin slowly: delay 
   if (cm_ignora_posit != 0) {
       digitalWrite (led_blue, LOW);      
       digitalWrite (led_green, HIGH); // da 0 a 250

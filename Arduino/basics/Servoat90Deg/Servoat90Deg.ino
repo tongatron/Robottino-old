@@ -1,16 +1,17 @@
-#include <Servo.h> 
- 
-Servo servo;  // create servo object to control a servo 
-                // twelve servo objects can be created on most boards
- 
-int pos = 0;    // variable to store the servo position 
+/*
+this sketch move the Robottino to 90 degrees
+*/
+
+#include <Servo.h>  
+Servo servo; 
+int pos = 0;
  
 void setup() 
 { 
-  servo.attach(8);  // attaches the servo on pin 9 to the servo object 
+  servo.attach(8);
 } 
  
 void loop() 
 {        
-    servo.write(90);              // tell servo to go to position in variable 'pos' 
+    servo.write(90);
 } 

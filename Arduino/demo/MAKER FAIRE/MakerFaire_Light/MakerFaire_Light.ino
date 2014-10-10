@@ -1,27 +1,35 @@
 /*
-https://gist.github.com/biokys/6846527
-https://learn.sparkfun.com/tutorials/connecting-arduino-to-processing/to-processing
-
-Array to store data
-http://arduino.cc/en/Reference/Array
-
-http://arduino.cc/en/Tutorial/Smoothing
-
-attenzione: possibile che sia necessario cambiare valore a: String portName = Serial.list()[3];
-mello sketch di Processing
-
-FARE
-con certi oggetti-distanza rallenta la velocità di cicalio
-
-NOTE
+Maker Faire 2014
 
 */
 
-//light theremin
-int sensorValue;
-int sensorValue2;
-int sensorLow = 1023;
-int sensorHigh = 0;
+// star wars 
+const int c = 261;
+const int d = 294;
+const int e = 329;
+const int f = 349;
+const int g = 391;
+const int gS = 415;
+const int a = 440;
+const int aS = 455;
+const int b = 466;
+const int cH = 523;
+const int cSH = 554;
+const int dH = 587;
+const int dSH = 622;
+const int eH = 659;
+const int fH = 698;
+const int fSH = 740;
+const int gH = 784;
+const int gSH = 830;
+const int aH = 880;
+const int buzzerPin = 11;
+const int ledPin1 = 9;
+const int ledPin2 = 13;
+int counter = 0;
+
+int sensorvalue;
+
 
 //display
 #include <Wire.h>
@@ -36,8 +44,11 @@ const int led_red = 13;
 #include <NewPing.h>
 #include <Servo.h> 
 
-
+#define TRIGGER_PIN  7 
+#define ECHO_PIN     4 
+#define MAX_DISTANCE 100 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 #define SERVO_PWM_PIN 8         
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); 
 
 // means -angle .. angle
 #define ANGLE_BOUNDS 80 // originale 80 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -46,6 +57,14 @@ const int led_red = 13;
 Servo myservo;
 int angle = 0;
 int dir = 1; // direction of servo movement  -1 = back, 1 = forward 
+
+
+// funzione per neutralizzare i falsi positivi isoltati
+const int numReadings = 3; 
+int readings[numReadings];                // the readings from the analog input
+int index = 0;                  // the index of the current reading
+int total = 0;                  // the running total
+int cm_ignora_posit = 0;                // the cm_ignora_posit
 
 
 static unsigned char mouth_zigzag[] PROGMEM ={
@@ -185,19 +204,12 @@ static unsigned char daje[] PROGMEM ={
 
 void setup() {
   
- 
-  //
-    while (millis() < 5000) {
-    sensorValue = analogRead(A5);
-    if (sensorValue > sensorHigh) {
-      sensorHigh = sensorValue;
-    }
-    if (sensorValue < sensorLow) {
-      sensorLow = sensorValue;
-    }
-  }
+
+
+  for (int thisReading = 0; thisReading < numReadings; thisReading++) // 0, 1, 2
+   readings[thisReading] = 0;  
   
-  //output
+    //output
   pinMode(buzzer,OUTPUT);
   pinMode(led_blue, OUTPUT);
   pinMode(led_green, OUTPUT);
@@ -211,6 +223,7 @@ void setup() {
   SeeedOled.drawBitmap(mouth_zigzag,1024);
   delay(200);
 
+  
   Serial.begin(9600); 
   
   // se attacco il servo, non funziona più la luce verde!!!!!!!!!!!!!!!
@@ -224,19 +237,13 @@ void loop() {
   // we must renormalize to positive values, because angle is from -ANGLE_BOUNDS .. ANGLE_BOUNDS
   // and servo value must be positive
   
-  delay(30);
-  
   myservo.write(angle + ANGLE_BOUNDS);
   
-  ledgreen();
+  // read distance from sensor and send to serial
+  getDistanceAndSend2Serial(angle);
   
-  Serial.println(sensorValue);
-
-      sensorValue = analogRead(A5);
-      sensorValue2 = analogRead(A4);      
-      //int pitch = map((sensorValue+sensorValue2/2), sensorLow, sensorHigh, 4000, 5000);
-      int pitch = map(sensorValue, sensorLow, sensorHigh, 400, 800);
-      tone(11, pitch, 20);         
+  ledgreen();
+  analogWrite (buzzer, 0);
   
   // calculate angle
   if (angle >= ANGLE_BOUNDS || angle <= -ANGLE_BOUNDS) {
@@ -245,6 +252,29 @@ void loop() {
   angle += (dir * ANGLE_STEP);    
 }
 
+
+int getDistanceAndSend2Serial(int angle) {
+  int cm = sonar.ping_cm();
+  delay(15);
+
+
+  readings[index] = cm;
+  cm_ignora_posit = (readings[0] * readings[1] * readings[2]);
+  index = index + 1;
+  if (index>=numReadings)
+	index = 0;
+
+    sensorvalue = analogRead(A5);
+    Serial.println(sensorvalue);
+    
+    if (sensorvalue<800){
+            ledred();
+        SeeedOled.drawBitmap(daje,1024);
+        delay(1000);
+        SeeedOled.drawBitmap(mouth_zigzag,1024);
+      
+    }
+}
 
 // **************************** ****************************  ****************************
 
@@ -272,17 +302,85 @@ void ledoff(){
   digitalWrite(led_red, LOW);  
 }
 
+
 // **************************** ****************************  ****************************
 
-void voice(){
-   for (int i=0; i <= 40; i++){
-      sensorValue = analogRead(A5);
-      int pitch = map(sensorValue, sensorLow, sensorHigh, 4000, 5000);
-      tone(buzzer, pitch, 20);
-      delay(10);      
-      sensorValue = analogRead(A5);
-      pitch = map(sensorValue, sensorLow, sensorHigh, 4000, 5000);
-      tone(buzzer, pitch, 20);
-      delay(10);   
-    }      
+
+void beep(int note, int duration)
+{
+  //Play tone on buzzerPin
+  tone(buzzerPin, note, duration);
+ 
+  //Play different LED depending on value of 'counter'
+  if(counter % 2 == 0)
+  {
+    digitalWrite(ledPin1, HIGH);
+    delay(duration);
+    digitalWrite(ledPin1, LOW);
+  }else
+  {
+    digitalWrite(ledPin2, HIGH);
+    delay(duration);
+    digitalWrite(ledPin2, LOW);
+  }
+ 
+  //Stop tone on buzzerPin
+  noTone(buzzerPin);
+ 
+  delay(50);
+ 
+  //Increment counter
+  counter++;
+}
+ 
+void firstSection()
+{
+  beep(a, 500);
+  beep(a, 500);    
+  beep(a, 500);
+  beep(f, 350);
+  beep(cH, 150);  
+  beep(a, 500);
+  beep(f, 350);
+  beep(cH, 150);
+  beep(a, 650);
+ 
+  delay(500);
+ 
+  beep(eH, 500);
+  beep(eH, 500);
+  beep(eH, 500);  
+  beep(fH, 350);
+  beep(cH, 150);
+  beep(gS, 500);
+  beep(f, 350);
+  beep(cH, 150);
+  beep(a, 650);
+ 
+  delay(500);
+}
+ 
+void secondSection()
+{
+  beep(aH, 500);
+  beep(a, 300);
+  beep(a, 150);
+  beep(aH, 500);
+  beep(gSH, 325);
+  beep(gH, 175);
+  beep(fSH, 125);
+  beep(fH, 125);    
+  beep(fSH, 250);
+ 
+  delay(325);
+ 
+  beep(aS, 250);
+  beep(dSH, 500);
+  beep(dH, 325);  
+  beep(cSH, 175);  
+  beep(cH, 125);  
+  beep(b, 125);  
+  beep(cH, 250);  
+ 
+  delay(350);
 }

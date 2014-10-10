@@ -1,5 +1,5 @@
 /*
-
+servo movement:
 with ambient light: 90'
 more light > 180
 less light > 0

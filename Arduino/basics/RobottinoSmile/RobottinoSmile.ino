@@ -1,3 +1,9 @@
+/*
+draws a robot-smile on the display of the Robottino
+
+Giovanni Bindi
+oct. 2014
+*/
 
 #include <Wire.h>
 #include <SeeedOLED.h>

@@ -1,4 +1,7 @@
-
+/*
+Giovanni Bindi
+oct. 2014
+*/
 //display
 #include <Wire.h>
 #include <SeeedOLED.h>

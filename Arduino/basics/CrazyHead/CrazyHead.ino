@@ -1,4 +1,11 @@
-// without daly between positions on the servo, the head will shake
+/*
+without delay between servo positions, the head will shake
+
+Giovanni Bindi
+oct 2014
+*/
+
+
 
 #include <Servo.h> 
  

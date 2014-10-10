@@ -1,8 +1,10 @@
 /*
+Giovanni Bindi
 28 settembre 2014
 ROBOTTINI @MakerFaire
-
 max delay motore: 2-3
+
+
 */
 
 #include <Wire.h>

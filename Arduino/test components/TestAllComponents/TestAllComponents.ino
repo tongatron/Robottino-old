@@ -1,23 +1,7 @@
 /*
-  A4   photoresistor
-  A5   photoresistor
-  
-  0
-  1
-  2    SDA - Display
-  3  ~ SCL - Display
-  4    ultrasonic echo
-  5  ~ 
-  6  ~ 
-  7    ultrasonic trigger  
-  8    servo
-  9  ~ RGB Blue
-  10 ~ RGB Green
-  11 ~ Buzzer
-  12
-  13 ~ RGB Red
+Giovanni Bindi
+oct. 2014
 */
-
 
 //Servo
 #include <Servo.h> 

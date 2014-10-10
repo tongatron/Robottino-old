@@ -1,10 +1,11 @@
 /*
-
 it moves to 0-180 and back
 misure distance
 if distance is less then xx
 it stops, souns Star Wars and writes a message on screen
 
+Giovanni Bindi
+oct. 2014
 */
 
 // star wars 
