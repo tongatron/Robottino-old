@@ -8,7 +8,7 @@ Plug an Arduino board on its back, then set the instructions and combining compo
 
 Robottino is an Arduino shield and works with Arduino boards: Uno, Leonardo, Yùn (web connection) and many others.
 
-Note that the RobottinoYun codes are stored in a private repository, because they still contanin users and passwords fot the web services. Feel free to ssk if you want to join the RobottinoYun repository.  
+Note that the RobottinoYun codes are stored in a private repository, because they still caontains users and passwords for the web services. Feel free to ask if you want to join the RobottinoYun repository.  
 
 Robottino is still a prototype. Need to work on: design, circuits and developing software libraries, examples and tutorials to make programming as easy as possible.
 
