@@ -1,19 +1,9 @@
 /*
-https://gist.github.com/biokys/6846527
-https://learn.sparkfun.com/tutorials/connecting-arduino-to-processing/to-processing
 
-Array to store data
-http://arduino.cc/en/Reference/Array
-
-http://arduino.cc/en/Tutorial/Smoothing
-
-attenzione: possibile che sia necessario cambiare valore a: String portName = Serial.list()[3];
-mello sketch di Processing
-
-FARE
-con certi oggetti-distanza rallenta la velocità di cicalio
-
-NOTE
+it moves to 0-180 and back
+misure distance
+if distance is less then xx
+it stops, souns Star Wars and writes a message on screen
 
 */
 
@@ -66,7 +56,8 @@ NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 #define ANGLE_BOUNDS 80 // originale 80 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #define ANGLE_STEP 1
 
-Servo myservo;
+Servo servo;
+int pos = 0;
 int angle = 0;
 int dir = 1; // direction of servo movement  -1 = back, 1 = forward
 const int slow = 4;
@@ -239,7 +230,7 @@ void setup() {
   Serial.begin(9600); 
   
   // se attacco il servo, non funziona più la luce verde!!!!!!!!!!!!!!!
-  myservo.attach(SERVO_PWM_PIN);  
+  servo.attach(SERVO_PWM_PIN);  
   delay(200);
   ledblue();
 }
@@ -249,7 +240,7 @@ void loop() {
   // we must renormalize to positive values, because angle is from -ANGLE_BOUNDS .. ANGLE_BOUNDS
   // and servo value must be positive
   
-  myservo.write(angle + ANGLE_BOUNDS);
+  servo.write(angle + ANGLE_BOUNDS);
   
   // read distance from sensor and send to serial
   getDistanceAndSend2Serial(angle);

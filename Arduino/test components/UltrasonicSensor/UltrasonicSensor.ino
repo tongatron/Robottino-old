@@ -11,11 +11,11 @@
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
 void setup() {
-  Serial.begin(115200); // Open serial monitor at 115200 baud to see ping results.
+  Serial.begin(9600); // Open serial monitor at 115200 baud to see ping results.
 }
 
 void loop() {
-  delay(50);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
+  delay(50);  // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
   int cm = sonar.ping_cm();
   Serial.print("Ping: ");
   Serial.println(cm);

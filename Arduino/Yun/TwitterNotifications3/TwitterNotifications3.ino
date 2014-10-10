@@ -16,8 +16,8 @@ char tweetchar_old[112];
 #include <Servo.h>  
 Servo servo;
 int pos = 0;
-const int slow = 8;
-const int fast = 2;
+const int slow = 80;
+const int fast = 20;
 
 //output
 const int buzzer = 11;
@@ -115,8 +115,9 @@ void setup() {
      
   //Serial.begin(9600);
   servo.attach(8);
+  servo.write(90);
+  delay(100);
   
-  delay(1000);
   //while(!Serial);  // For debugging, wait until a serial console is connected.
   
   Bridge.begin();
@@ -195,7 +196,7 @@ void loop()
                 delay(1000);
       	      }
               else {
-              rotate();
+              crazyhead();
 	      SeeedOled.clearDisplay();
               SeeedOled.setHorizontalMode();
 	      SeeedOled.putString(tweetchar);
@@ -235,27 +236,22 @@ void loop()
 }
 
 
+
 // **************************** ****************************  ****************************
 
-void rotate(){
-  
-  for(pos = 90; pos <= 130; pos += 1)  {
-  servo.write(pos);           
-  delay(slow);                    
-  } 
- 
-  for(pos = 130; pos>=40; pos-=1){
-  servo.write(pos);         
-  delay(fast);            
-  }
- 
-  for(pos = 40; pos <= 90; pos += 1)  {
-  servo.write(pos);           
-  delay(slow);                    
-  }
 
-  servo.write(90);
-  delay(100);
+void crazyhead() {
+ for (int i=0; i <= 90; i++){ 
+    for(pos = 0; pos <= 180; pos += 1) // goes from 0 degrees to 180 degrees 
+    {                                  // in steps of 1 degree 
+      servo.write(pos);              // tell servo to g to position in variable 'pos' 
+    } 
+    for(pos = 180; pos>=0; pos-=1)     // goes from 180 degrees to 0 degrees 
+    {                                
+      servo.write(pos);              // tell servo to go to position in variable 'pos' 
+    }
+ }
+ servo.write(90); 
 }
 
 // **************************** ****************************  ****************************
