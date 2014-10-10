@@ -1,7 +1,13 @@
 /*
+Giovanni Bindi
+oct. 2014
+adapted from:
 https://gist.github.com/biokys/6846527
+
+hwo to connect Arduino to Processing:
 https://learn.sparkfun.com/tutorials/connecting-arduino-to-processing/to-processing
-attenzione: possibile che sia necessario cambiare valore a: String portName = Serial.list()[3];
+
+attenzione: forse cambiare valore a: String portName = Serial.list()[3];
 */
 
 import processing.serial.*;
