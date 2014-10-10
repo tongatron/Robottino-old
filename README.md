@@ -8,9 +8,16 @@ Plug an Arduino board on its back, then set the instructions and combining compo
 
 Robottino is an Arduino shield and works with Arduino boards: Uno, Leonardo, Yùn (web connection) and many others.
 
+Robottino is still a prototype. Need to work on: design, circuits and developing software libraries, examples and tutorials to make programming as easy as possible.
+
 Note that the RobottinoYun codes are stored in a private repository, because they still caontains users and passwords for the web services. Feel free to ask if you want to join the RobottinoYun repository.  
 
-Robottino is still a prototype. Need to work on: design, circuits and developing software libraries, examples and tutorials to make programming as easy as possible.
+
+
+### NEXT STEPS
+1) **library**: main functions needs to be as simple as possibile, like a “Robottino for dummies”. Example: Robottino.writeRGB(255, 0, 0), RobottinoReadAntennas, RobottinoSpinTheHead...  
+2) more examples, functions, tutorials, demos, actions, interactions...   
+3) looking for compatibility to some simple programming interface, like S4A
 
 
 ### EXTERNAL LIBRARIES
@@ -25,6 +32,10 @@ Robottino is still a prototype. Need to work on: design, circuits and developing
 
 **Temboo**  
 [www.temboo.com/arduino/yun/library-installation](https://www.temboo.com/arduino/yun/library-installation)
+
+
+
+
 
 
 
