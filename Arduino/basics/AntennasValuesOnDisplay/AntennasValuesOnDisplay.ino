@@ -1,3 +1,8 @@
+/*
+the mouth-display shows the light values from antennas
+
+*/
+
 #include <Wire.h>
 #include <SeeedOLED.h>
 
