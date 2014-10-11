@@ -1,7 +1,15 @@
 /*
+when and object make shadow on the head of Robottino
+it reacts spinning the head, scared mouth, making sounds and red led
+
+at the beginning, the program reads light sensors and stores an average value
+you can change the "fork" value to adjust sensibility of the alarm
+
 Giovanni Bindi
-oct. 2014
+oct 2014
 */
+
+
 //display
 #include <Wire.h>
 #include <SeeedOLED.h>
@@ -12,25 +20,19 @@ const int led_blue = 9;
 const int led_green = 10;
 const int led_red = 13;
 
-//fade led
-int brightness = 0;    // how bright the LED is
-int fadeAmount = 5;    // how many points to fade the LED by
+//antennas
+int antennas = 0;     
+int sensorMin = 1023;       
+int sensorMax = 0;
+int average = 0;
+int fork = 100; //max difference form average
 
-//servo
-#include <Servo.h>  
+//motor
+#include <Servo.h> 
 Servo servo;
-int pos = 0;
-const int slow = 30;
-const int fast = 10;
+int pos = 90;
 
- #include "pitches.h"
-int melody[] = {
-  NOTE_C4, NOTE_G3,NOTE_G3, NOTE_A3, NOTE_G3,0, NOTE_B3, NOTE_C4};
-int noteDurations[] = {
-  4, 8, 8, 4,4,4,4,4 };
-
-
-static unsigned char smile_display[] PROGMEM ={
+static unsigned char mouth_scared [] PROGMEM ={
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -97,7 +99,7 @@ static unsigned char smile_display[] PROGMEM ={
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-static unsigned char line_display[] PROGMEM ={
+static unsigned char mouth_plane[] PROGMEM ={
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -164,81 +166,88 @@ static unsigned char line_display[] PROGMEM ={
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-
 void setup() {
+  
+    //output
+  pinMode(buzzer,OUTPUT);
+  pinMode(led_blue, OUTPUT);
+  pinMode(led_green, OUTPUT);
+  pinMode(led_red, OUTPUT);
+
+  ledblue();
+ 
+  servo.attach(8);
+  servo.write(pos);
+  delay(10);
   
   //display
   Wire.begin();
   SeeedOled.init(); 
   SeeedOled.clearDisplay();
-  SeeedOled.drawBitmap(line_display,1024);  
-  
-  //output
-  pinMode(buzzer,OUTPUT);
-  pinMode(led_blue, OUTPUT);
-  pinMode(led_green, OUTPUT);
-  pinMode(led_red, OUTPUT);
+  SeeedOled.drawBitmap(mouth_plane,1024);
    
+   //Serial.begin(9600);
+  
+    for (int i=0; i <= 500; i++){
+     
+      int antenna1 = analogRead(A5);
+      int antenna2 = analogRead(A4);
+      delay(5);
+      antennas = ((antenna1 + antenna1)/2);
+      
+      if (antennas > sensorMax) {
+        sensorMax = antennas;
+      }
+      if (antennas < sensorMin) {
+        sensorMin = antennas;
+      }
+    }
+    
+    average = ((sensorMin + sensorMax)/2);
 
-  ledblue();  
- 
-  //Servo
-  servo.attach(8);
-  servo.write(90);
-
+  ledgreen();
 }
 
 void loop() {
-
-  rotate();
-  crazyhead();
-  ledgreen();
-  tonemelody();
-  ledblue();
-  SeeedOled.clearDisplay();
-  SeeedOled.drawBitmap(line_display,1024); 
-  delay(9000);
-}
-
-
-
-
-// **************************** ****************************  ****************************
-
-void rotate(){
   
-  for(pos = 90; pos <= 180; pos += 1)  {
-  servo.write(pos);           
-  delay(slow);                    
-  } 
- 
-  for(pos = 180; pos>=0; pos-=1){
-  servo.write(pos);         
-  delay(fast);            
-  }
- 
-  for(pos = 0; pos <= 180; pos += 1)  {
-  servo.write(pos);           
-  delay(slow);                    
+  int antenna1 = analogRead(A5);
+  int antenna2 = analogRead(A4);
+  delay(2);
+  antennas = ((antenna1 + antenna1)/2);
+  
+  if (antennas < (average-fork)){
+    digitalWrite(buzzer, HIGH);   
+    ledred();
+    SeeedOled.clearDisplay();
+    SeeedOled.drawBitmap(mouth_scared,1024);
+    digitalWrite(buzzer, LOW);       
+    crazyhead();
+    delay(2000);
+    servo.write(90);
+    SeeedOled.clearDisplay();
+    SeeedOled.drawBitmap(mouth_plane,1024);
+    ledgreen();
   }
   
-  for(pos = 180; pos <= 90; pos += 1)  {
-  servo.write(pos);           
-  delay(slow);                    
-  }
- 
+  delay(1);        
   
-  servo.write(90);
+  /*
+  Serial.print("A5: ");
+  Serial.print(antenna1);
+  Serial.print(" A4: ");  
+  Serial.print(antenna2);
+  Serial.print(" average: ");  
+  Serial.print(average);  
+  Serial.print(" antennas: ");  
+  Serial.println(antennas);
+  */
 
 }
 
 // **************************** ****************************  ****************************
+
 void crazyhead() {
-  ledred();
-  SeeedOled.clearDisplay();
-  SeeedOled.drawBitmap(smile_display,1024);
-  
-  for (int i=0; i <= 90; i++){ 
+ for (int i=0; i <= 90; i++){ 
     for(pos = 0; pos <= 180; pos += 1) // goes from 0 degrees to 180 degrees 
     {                                  // in steps of 1 degree 
       servo.write(pos);              // tell servo to g to position in variable 'pos' 
@@ -248,32 +257,10 @@ void crazyhead() {
       servo.write(pos);              // tell servo to go to position in variable 'pos' 
     }
  }
- servo.write(90);
-  
-}
-// **************************** ****************************  ****************************
-
-
-void tonemelody(){
-  for (int thisNote = 0; thisNote < 8; thisNote++) {
-
-    // to calculate the note duration, take one second 
-    // divided by the note type.
-    //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
-    int noteDuration = 1000/noteDurations[thisNote];
-    tone(11, melody[thisNote],noteDuration);
-
-    // to distinguish the notes, set a minimum time between them.
-    // the note's duration + 30% seems to work well:
-    int pauseBetweenNotes = noteDuration * 1.30;
-    delay(pauseBetweenNotes);
-    // stop the tone playing:
-    noTone(1);
-  }
+ servo.write(90); 
 }
 
 // **************************** ****************************  ****************************
-
 
 void ledred(){
   digitalWrite(led_blue, LOW);
