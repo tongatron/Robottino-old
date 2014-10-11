@@ -1,6 +1,9 @@
 /*
 the mouth-display shows the light values from antennas
 
+Giovanni Bindi
+oct. 2014
+
 */
 
 #include <Wire.h>
