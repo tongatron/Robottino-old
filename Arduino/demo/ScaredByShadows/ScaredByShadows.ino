@@ -216,13 +216,12 @@ void loop() {
   antennas = ((antenna1 + antenna1)/2);
   
   if (antennas < (average-fork)){
-    digitalWrite(buzzer, HIGH);   
+    //digitalWrite(buzzer, HIGH);   
     ledred();
     SeeedOled.clearDisplay();
     SeeedOled.drawBitmap(mouth_scared,1024);
-    digitalWrite(buzzer, LOW);       
+    //digitalWrite(buzzer, LOW);       
     crazyhead();
-    delay(2000);
     servo.write(90);
     SeeedOled.clearDisplay();
     SeeedOled.drawBitmap(mouth_plane,1024);
