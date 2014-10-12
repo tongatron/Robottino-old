@@ -1,0 +1,4 @@
+http://www.firmata.org/wiki/Main_Page
+to download firm data software
+
+upload StandardFirmata.ino
