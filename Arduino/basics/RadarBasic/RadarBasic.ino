@@ -2,6 +2,10 @@
 https://gist.github.com/biokys/6846527
 https://learn.sparkfun.com/tutorials/connecting-arduino-to-processing/to-processing
 
+sometimes the ultrasonic sensor give casual value (es. 70) in a row of 0 (no object detected)
+to ignore that error, "ignora_posit" isolates fake readings.
+If distance is different that 0 (there is an object on the range), Robottino will play buzzer and show lights
+
 Giovanni Bindi
 oct. 2014
 
