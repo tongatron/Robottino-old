@@ -20,8 +20,8 @@ int fadeAmount = 5;    // how many points to fade the LED by
 #include <Servo.h>  
 Servo servo;
 int pos = 0;
-const int slow = 30;
-const int fast = 10;
+const int slow = 15;
+const int fast = 3;
 
 
 static unsigned char smile_display[] PROGMEM ={

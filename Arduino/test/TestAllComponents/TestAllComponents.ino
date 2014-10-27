@@ -38,7 +38,7 @@ void setup(){
   SeeedOled.setNormalDisplay();      //Set display to normal mode (i.e non-inverse mode)
   SeeedOled.setPageMode();           //Set addressing mode to Page Mode
   SeeedOled.setTextXY(0,0);
-  SeeedOled.putString("xxxxxxxxxxxxxxxx");
+  SeeedOled.putString("xxxxxxxaaxxxxxxx");
   SeeedOled.setTextXY(1,0);
   SeeedOled.putString("xxxxxxxxxxxxxxxx");
   SeeedOled.setTextXY(2,0);
