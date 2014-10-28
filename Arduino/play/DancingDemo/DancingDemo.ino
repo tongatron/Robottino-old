@@ -7,7 +7,7 @@ oct. 2014
 #include <SeeedOLED.h>
 
 //output
-const int buzzer = 11;
+const int Buzzer = 11;
 const int led_blue = 9;
 const int led_green = 10;
 const int led_red = 13;
@@ -168,7 +168,7 @@ void setup() {
   SeeedOled.drawBitmap(mouth_smile,1024);  
   
   //output
-  pinMode(buzzer,OUTPUT);
+  pinMode(Buzzer,OUTPUT);
   pinMode(led_blue, OUTPUT);
   pinMode(led_green, OUTPUT);
   pinMode(led_red, OUTPUT);
@@ -225,9 +225,15 @@ void rotate(){
 
 // **************************** ****************************  ****************************
 void crazyhead() {
+
   ledred();
   SeeedOled.clearDisplay();
   SeeedOled.drawBitmap(smile_display,1024);
+  servo.write(90);
+  delay(100);
+  arf();
+  delay(500);
+ 
   
   for (int i=0; i <= 90; i++){ 
     for(pos = 0; pos <= 180; pos += 1) // goes from 0 degrees to 180 degrees 
@@ -269,4 +275,28 @@ void ledoff(){
     digitalWrite(led_blue, LOW);
   digitalWrite(led_green, LOW);
   digitalWrite(led_red, LOW);  
+}
+
+
+
+void arf() {    // dog arf
+  uint16_t i;
+  playTone(890,25);          // "a"    (short)
+  for(i=890; i<910; i+=2)    // "rrr"  (vary down)
+     playTone(i,5);
+  playTone(4545,80);         // intermediate
+  playTone(12200,70);        // "ff"   (shorter, hard to do)
+}
+
+// play tone on a piezo Buzzer: tone shorter values produce higher frequencies
+//  which is opposite beep() but avoids some math delay - similar to code by Erin Robotgrrl
+
+void playTone(uint16_t tone1, uint16_t duration) {
+  if(tone1 < 50 || tone1 > 15000) return;  // these do not play on a piezo
+  for (long i = 0; i < duration * 1000L; i += tone1 * 2) {
+     digitalWrite(Buzzer, HIGH);
+     delayMicroseconds(tone1);
+     digitalWrite(Buzzer, LOW);
+     delayMicroseconds(tone1);
+  }     
 }
