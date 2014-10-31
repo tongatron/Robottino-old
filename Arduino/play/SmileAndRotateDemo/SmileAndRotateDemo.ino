@@ -1,38 +1,30 @@
 /*
-when and object make shadow on the head of Robottino
-it reacts spinning the head, scared mouth, making sounds and red led
-
-at the beginning, the program reads light sensors and stores an average value
-you can change the "fork" value to adjust sensibility of the alarm
-
 Giovanni Bindi
-oct 2014
+oct. 2014
 */
-
-
 //display
 #include <Wire.h>
 #include <SeeedOLED.h>
 
 //output
-const int buzzer = 11;
+const int Buzzer = 11;
 const int led_blue = 9;
 const int led_green = 10;
 const int led_red = 13;
 
-//antennas
-int antennas = 0;     
-int sensorMin = 1023;       
-int sensorMax = 0;
-int average = 0;
-int fork = 60; //max difference form average
+//fade led
+int brightness = 0;    // how bright the LED is
+int fadeAmount = 5;    // how many points to fade the LED by
 
-//motor
-#include <Servo.h> 
+//servo
+#include <Servo.h>  
 Servo servo;
-int pos = 90;
+int pos = 0;
+const int slow = 80;
+const int fast = 3;
 
-static unsigned char mouth_scared [] PROGMEM ={
+
+static unsigned char smile_display[] PROGMEM ={
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -166,100 +158,55 @@ static unsigned char mouth_smile[] PROGMEM ={
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-void setup() {
-  
-    //output
-  pinMode(buzzer,OUTPUT);
-  pinMode(led_blue, OUTPUT);
-  pinMode(led_green, OUTPUT);
-  pinMode(led_red, OUTPUT);
 
-  ledblue();
- 
-  servo.attach(8);
-  servo.write(pos);
-  delay(10);
+void setup() {
   
   //display
   Wire.begin();
   SeeedOled.init(); 
   SeeedOled.clearDisplay();
-  SeeedOled.drawBitmap(mouth_smile,1024);
-   
-   //Serial.begin(9600);
+  SeeedOled.drawBitmap(mouth_smile,1024);  
   
-    for (int i=0; i <= 500; i++){
-     
-      int antenna1 = analogRead(A5);
-      int antenna2 = analogRead(A4);
-      delay(5);
-      antennas = ((antenna1 + antenna1)/2);
-      
-      if (antennas > sensorMax) {
-        sensorMax = antennas;
-      }
-      if (antennas < sensorMin) {
-        sensorMin = antennas;
-      }
-    }
-    
-    average = ((sensorMin + sensorMax)/2);
+  //output
+  pinMode(Buzzer,OUTPUT);
+  pinMode(led_blue, OUTPUT);
+  pinMode(led_green, OUTPUT);
+  pinMode(led_red, OUTPUT);
+   
 
-  ledgreen();
+ 
+ 
+  //Servo
+  servo.attach(8);
+  servo.write(180);
+  ledgreen(); 
+    
+      SeeedOled.clearDisplay();
+  SeeedOled.drawBitmap(mouth_smile,1024); 
+
 }
 
 void loop() {
+
   
-  int antenna1 = analogRead(A5);
-  int antenna2 = analogRead(A4);
-  delay(2);
-  antennas = ((antenna1 + antenna1)/2);
-  
-  if (antennas < (average-fork)){
-    //digitalWrite(buzzer, HIGH);   
-    ledred();
-    SeeedOled.clearDisplay();
-    SeeedOled.drawBitmap(mouth_scared,1024);
-    //digitalWrite(buzzer, LOW);       
-    crazyhead();
-    servo.write(90);
-    SeeedOled.clearDisplay();
-    SeeedOled.drawBitmap(mouth_smile,1024);
-    ledgreen();
+  for(pos = 180; pos <= 0; pos += 1)  {
+  servo.write(pos);           
+  delay(slow);                    
   }
-  
-  delay(1);        
-  
-  /*
-  Serial.print("A5: ");
-  Serial.print(antenna1);
-  Serial.print(" A4: ");  
-  Serial.print(antenna2);
-  Serial.print(" average: ");  
-  Serial.print(average);  
-  Serial.print(" antennas: ");  
-  Serial.println(antennas);
-  */
+ 
+  for(pos = 180; pos>=0; pos-=1){
+  servo.write(pos);         
+  delay(slow);            
+  }
+ 
+  for(pos = 0; pos <= 180; pos += 1)  {
+  servo.write(pos);           
+  delay(slow);                    
+  }
 
 }
 
-// **************************** ****************************  ****************************
 
-void crazyhead() {
- for (int i=0; i <= 90; i++){ 
-    for(pos = 0; pos <= 180; pos += 1) // goes from 0 degrees to 180 degrees 
-    {                                  // in steps of 1 degree 
-      servo.write(pos);              // tell servo to g to position in variable 'pos' 
-    } 
-    for(pos = 180; pos>=0; pos-=1)     // goes from 180 degrees to 0 degrees 
-    {                                
-      servo.write(pos);              // tell servo to go to position in variable 'pos' 
-    }
- }
- servo.write(90); 
-}
-
-// **************************** ****************************  ****************************
 
 void ledred(){
   digitalWrite(led_blue, LOW);
